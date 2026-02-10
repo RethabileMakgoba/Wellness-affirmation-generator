@@ -88,12 +88,12 @@ cd frontend
 - **Option 2**: Use VS Code Live Server extension
 - **Option 3**: Run: `python -m http.server 8000` then visit `http://localhost:8000`
 
-## 🎮 How to Use
+##  How to Use
 
 1. **Select your mood** from the dropdown (e.g., "Anxious", "Stressed")
 2. **Optionally describe your situation** (e.g., "preparing for job interview")
 3. **Click "Generate My Affirmation"**
-4. **Receive your personalized affirmation** ✨
+4. **Receive your personalized affirmation** 
 
 ##  How Frontend Connects to Backend
 
@@ -174,4 +174,4 @@ This project is for portfolio purposes.
 
 ---
 
-Built with 💜 for mental wellbeing
+Built with 💜git init for mental wellbeing
