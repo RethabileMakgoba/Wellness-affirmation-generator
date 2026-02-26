@@ -1,10 +1,10 @@
 /**
  * AI Wellness Affirmation Generator - Frontend JavaScript
- * Connects the HTML interface to the Python Flask backend
+ * Connects the HTML interface to the Python Flask backend on Render
  */
 
-// Configuration
-const API_URL = 'http://localhost:5000';
+// 🔥 LIVE backend URL
+const API_URL = 'https://wellness-affirmation-generator.onrender.com';
 
 // DOM Elements
 const moodSelect = document.getElementById('mood');
@@ -30,61 +30,50 @@ situationInput.addEventListener('keypress', (e) => {
 
 /**
  * Main function to generate affirmation
- * This is where the frontend connects to the backend!
  */
 async function handleGenerateAffirmation() {
     const mood = moodSelect.value;
-    const situation = situationInput.value;
-    
+    const situation = situationInput.value.trim();
+
     // Validation
     if (!mood) {
-        showError('Please select how you\'re feeling');
+        showError("Please select how you're feeling.");
         return;
     }
-    
-    // Show loading state
+
     hideAllSections();
     loadingSection.classList.remove('hidden');
     generateBtn.disabled = true;
-    
+
     try {
-        // THIS IS THE KEY PART: Frontend calling Backend API
         const response = await fetch(`${API_URL}/api/generate-affirmation`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                mood: mood,
-                situation: situation
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mood, situation })
         });
-        
-        // Check if request was successful
+
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Server returned status ${response.status}`);
         }
-        
-        // Parse the JSON response from backend
+
         const data = await response.json();
-        
+
         if (data.success) {
-            // Display the affirmation
             displayAffirmation(data.affirmation);
         } else {
-            throw new Error(data.error || 'Failed to generate affirmation');
+            throw new Error(data.error || 'Failed to generate affirmation.');
         }
-        
+
     } catch (error) {
-        console.error('Error generating affirmation:', error);
-        showError('Unable to connect to the server. Please make sure the backend is running.');
+        console.error('Error:', error);
+        showError('Unable to connect to the server. Please try again.');
     } finally {
         generateBtn.disabled = false;
     }
 }
 
 /**
- * Display the generated affirmation
+ * Display the generated affirmation on the page
  */
 function displayAffirmation(affirmation) {
     hideAllSections();
@@ -93,13 +82,13 @@ function displayAffirmation(affirmation) {
 }
 
 /**
- * Show error message
+ * Show an error message on the page
  */
 function showError(message) {
     hideAllSections();
     errorText.textContent = message;
     errorSection.classList.remove('hidden');
-    
+
     // Auto-hide error after 5 seconds
     setTimeout(() => {
         errorSection.classList.add('hidden');
@@ -107,7 +96,7 @@ function showError(message) {
 }
 
 /**
- * Hide all sections
+ * Hide all UI sections
  */
 function hideAllSections() {
     resultSection.classList.add('hidden');
@@ -116,7 +105,7 @@ function hideAllSections() {
 }
 
 /**
- * Reset form to initial state
+ * Reset the form to initial state
  */
 function resetForm() {
     hideAllSections();
@@ -126,7 +115,7 @@ function resetForm() {
 }
 
 /**
- * Test backend connection on page load
+ * Optional: Test backend connection on page load
  */
 async function testBackendConnection() {
     try {
@@ -135,12 +124,8 @@ async function testBackendConnection() {
         console.log('✅ Backend connection successful:', data);
     } catch (error) {
         console.error('❌ Backend connection failed:', error);
-        console.log('Make sure to run: python app.py in the backend folder');
     }
 }
 
-// Test connection when page loads
+// Test backend on page load
 testBackendConnection();
-
-console.log('🚀 Frontend loaded successfully');
-console.log('📡 Connecting to backend at:', API_URL);
