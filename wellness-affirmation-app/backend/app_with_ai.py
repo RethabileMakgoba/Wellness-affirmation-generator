@@ -177,11 +177,7 @@ def generate_simple_affirmation(mood, situation):
     return base_affirmation
 
 if __name__ == '__main__':
-    print(" Starting AI Wellness Affirmation API...")
-    print(" Running on http://localhost:5000")
-    print(f" AI Status: {'ENABLED ✅ (FREE Groq AI)' if GROQ_API_KEY else 'DISABLED - Add GROQ_API_KEY to .env file'}")
-    print("\n Endpoints:")
-    print("   GET  / - Health check")
-    print("   POST /api/generate-affirmation - Generate affirmation")
-    print("   GET  /api/affirmations - View all affirmations")
-    app.run(debug=True, port=5000)
+    print("Starting AI Wellness Affirmation API...")
+
+    port = int(os.environ.get("PORT", 10000))  # Render provides PORT
+    app.run(host="0.0.0.0", port=port)
