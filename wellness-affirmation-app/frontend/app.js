@@ -1,8 +1,3 @@
-/**
- * AI Wellness Affirmation Generator - Frontend JavaScript
- * Connects the HTML interface to the Python Flask backend on Render
- */
-
 // 🔥 LIVE backend URL
 const API_URL = 'https://wellness-affirmation-generator.onrender.com';
 
@@ -20,22 +15,14 @@ const errorText = document.getElementById('errorText');
 // Event Listeners
 generateBtn.addEventListener('click', handleGenerateAffirmation);
 newAffirmationBtn.addEventListener('click', resetForm);
-
-// Handle Enter key in situation input
 situationInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        handleGenerateAffirmation();
-    }
+    if (e.key === 'Enter') handleGenerateAffirmation();
 });
 
-/**
- * Main function to generate affirmation
- */
 async function handleGenerateAffirmation() {
     const mood = moodSelect.value;
     const situation = situationInput.value.trim();
 
-    // Validation
     if (!mood) {
         showError("Please select how you're feeling.");
         return;
@@ -52,17 +39,12 @@ async function handleGenerateAffirmation() {
             body: JSON.stringify({ mood, situation })
         });
 
-        if (!response.ok) {
-            throw new Error(`Server returned status ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Server returned status ${response.status}`);
 
         const data = await response.json();
 
-        if (data.success) {
-            displayAffirmation(data.affirmation);
-        } else {
-            throw new Error(data.error || 'Failed to generate affirmation.');
-        }
+        if (data.success) displayAffirmation(data.affirmation);
+        else throw new Error(data.error || 'Failed to generate affirmation.');
 
     } catch (error) {
         console.error('Error:', error);
@@ -72,41 +54,25 @@ async function handleGenerateAffirmation() {
     }
 }
 
-/**
- * Display the generated affirmation on the page
- */
 function displayAffirmation(affirmation) {
     hideAllSections();
     affirmationText.textContent = affirmation;
     resultSection.classList.remove('hidden');
 }
 
-/**
- * Show an error message on the page
- */
 function showError(message) {
     hideAllSections();
     errorText.textContent = message;
     errorSection.classList.remove('hidden');
-
-    // Auto-hide error after 5 seconds
-    setTimeout(() => {
-        errorSection.classList.add('hidden');
-    }, 5000);
+    setTimeout(() => errorSection.classList.add('hidden'), 5000);
 }
 
-/**
- * Hide all UI sections
- */
 function hideAllSections() {
     resultSection.classList.add('hidden');
     loadingSection.classList.add('hidden');
     errorSection.classList.add('hidden');
 }
 
-/**
- * Reset the form to initial state
- */
 function resetForm() {
     hideAllSections();
     moodSelect.value = '';
@@ -114,9 +80,7 @@ function resetForm() {
     moodSelect.focus();
 }
 
-/**
- * Optional: Test backend connection on page load
- */
+// Optional: Test backend connection
 async function testBackendConnection() {
     try {
         const response = await fetch(`${API_URL}/`);
@@ -127,5 +91,4 @@ async function testBackendConnection() {
     }
 }
 
-// Test backend on page load
 testBackendConnection();
